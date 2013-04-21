@@ -61,7 +61,7 @@ public class AccountImpl implements Account {
      * @throws AccountException - if the account name is unacceptable
      */
     @Override
-    public void setName(String name) throws AccountException {
+    public void setName(final String name) throws AccountException {
         Preferences prefs = Preferences.userNodeForPackage(Account.class);
         if (name.length() < prefs.getInt("minAccountLength", 8)) {
             throw new AccountException("Account name too short: " + name);
@@ -85,7 +85,7 @@ public class AccountImpl implements Account {
      * @param passwordHash - the value to be stored for the password hash
      */
     @Override
-    public void setPasswordHash(byte[] passwordHash) {
+    public void setPasswordHash(final byte[] passwordHash) {
         this.passwordHash = passwordHash;
     }
 
@@ -105,7 +105,7 @@ public class AccountImpl implements Account {
      * @param balance - the account balance.
      */
     @Override
-    public void setBalance(int balance) {
+    public void setBalance(final int balance) {
         Preferences prefs = Preferences.userNodeForPackage(Account.class);
         if (balance < prefs.getInt("minAccountBalance", 0)) {
 
@@ -129,7 +129,7 @@ public class AccountImpl implements Account {
      * @param fullName - the full name of the account holder
      */
     @Override
-    public void setFullName(String fullName) {
+    public void setFullName(final String fullName) {
         this.fullName = fullName;
     }
 
@@ -149,8 +149,19 @@ public class AccountImpl implements Account {
      * @param address - the address value to use
      */
     @Override
-    public void setAddress(Address address) {
+    public void setAddress(final Address address) {
+        if (isEmptyAddress(address)) {
+            this.address = null;
+        } else {
         this.address = address;
+        }
+    }
+
+    private boolean isEmptyAddress(Address address) {
+        return (address.getStreetAddress() == null || address.getStreetAddress().length() == 0) &&
+               (address.getCity() == null || address.getCity().length() == 0) &&
+               (address.getState() == null || address.getState().length() == 0) &&
+               (address.getZipCode() == null || address.getZipCode().length() == 0);
     }
 
 
@@ -210,7 +221,16 @@ public class AccountImpl implements Account {
      */
     @Override
     public void setCreditCard(CreditCard card) {
-        this.creditCard = card;
+        if (isEmptyCreditCard(card)) {
+            this.creditCard = null;
+        } else {
+            this.creditCard = card;
+        }
+    }
+
+    private boolean isEmptyCreditCard(CreditCard card) {
+        return (card.getAccountNumber() == null || card.getAccountNumber().length() == 0) &&
+               (card.getHolder() == null || card.getHolder().length() == 0);
     }
 
 

@@ -27,6 +27,8 @@ import java.util.logging.Logger;
  * The DataSource for our DAO implementation
  */
 public class AccountDaoImpl implements AccountDao {
+    /** Empty string */
+    private static final String EMPTY_STRING = "";
 
     /** The SQL used to lookup an account in the mysql DB */
     private static final String ACCOUNT_LOOKUP_SQL =
@@ -123,7 +125,7 @@ public class AccountDaoImpl implements AccountDao {
      */
     @Override
     public Account getAccount(String accountName) {
-        Account account = new AccountImpl();
+        Account account = null;
 
         ResultSet rs = null;
         try {
@@ -131,6 +133,8 @@ public class AccountDaoImpl implements AccountDao {
             rs = getAccountPs.executeQuery();
 
             if (rs.next()) {
+                account = new AccountImpl();
+
                 account.setName(accountName);
                 account.setPasswordHash(rs.getBytes(1));
                 account.setBalance(rs.getInt(2));
@@ -157,6 +161,12 @@ public class AccountDaoImpl implements AccountDao {
             LOGGER.log(Level.SEVERE, "Unable to retrieve account for accountName = " + accountName, e);
         } catch (AccountException e) {
             LOGGER.log(Level.SEVERE, "Unable to set accountname to: " + accountName, e);
+        } finally {
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                LOGGER.log(Level.SEVERE, "Unable to close ResultSet", e);
+            }
         }
 
         return account;
@@ -188,6 +198,11 @@ public class AccountDaoImpl implements AccountDao {
                 updateAccountPs.setString(8, addr.getCity());
                 updateAccountPs.setString(9, addr.getState());
                 updateAccountPs.setString(10, addr.getZipCode());
+            } else {
+                updateAccountPs.setString(7, EMPTY_STRING);
+                updateAccountPs.setString(8, EMPTY_STRING);
+                updateAccountPs.setString(9, EMPTY_STRING);
+                updateAccountPs.setString(10, EMPTY_STRING);
             }
 
             CreditCard cc = account.getCreditCard();
@@ -197,9 +212,16 @@ public class AccountDaoImpl implements AccountDao {
                 updateAccountPs.setString(13, cc.getType());
                 updateAccountPs.setString(14, cc.getHolder());
                 updateAccountPs.setString(15, cc.getExpirationDate());
+            } else {
+                updateAccountPs.setString(11, EMPTY_STRING);
+                updateAccountPs.setString(12, EMPTY_STRING);
+                updateAccountPs.setString(13, EMPTY_STRING);
+                updateAccountPs.setString(14, EMPTY_STRING);
+                updateAccountPs.setString(15, EMPTY_STRING);
             }
 
             updateAccountPs.executeUpdate();
+            updateAccountPs.clearParameters();
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Unable to update account", e);
         }
