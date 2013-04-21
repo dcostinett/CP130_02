@@ -4,6 +4,7 @@ import edu.uw.ext.framework.account.Account;
 import edu.uw.ext.framework.account.AccountException;
 import edu.uw.ext.framework.account.AccountFactory;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
@@ -42,7 +43,7 @@ public class AccountFactoryImpl implements AccountFactory {
 
             LOGGER.info(String.format("Created account: %s, balance = %d", accountName, initialBalance));
         } catch (AccountException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Unable to create account", e);
         }
 
         return account;

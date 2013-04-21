@@ -36,8 +36,8 @@ public class AddressImpl implements Address {
     }
 
     @Override
-    public void setStreetAddress(String streetAddress) {
-        this.streetAddress = streetAddress;
+    public void setStreetAddress(final String streetAddress) {
+        this.streetAddress = streetAddress == null ? "" : streetAddress;
     }
 
     @Override
@@ -46,8 +46,8 @@ public class AddressImpl implements Address {
     }
 
     @Override
-    public void setCity(String city) {
-        this.city = city;
+    public void setCity(final String city) {
+        this.city = city == null ? "" : city;
     }
 
     @Override
@@ -56,8 +56,8 @@ public class AddressImpl implements Address {
     }
 
     @Override
-    public void setState(String state) {
-        this.state = state;
+    public void setState(final String state) {
+        this.state = state == null ? "" : state;
     }
 
     @Override
@@ -66,7 +66,7 @@ public class AddressImpl implements Address {
     }
 
     @Override
-    public void setZipCode(String zip) {
-        this.zipCode = zip;
+    public void setZipCode(final String zip) {
+        this.zipCode = zip == null ? "" : zip;
     }
 }

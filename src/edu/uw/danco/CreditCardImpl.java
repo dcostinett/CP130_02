@@ -16,83 +16,102 @@ public class CreditCardImpl implements CreditCard {
     private String accountNumber;
     private String expirationDate;
 
-    @Override
     /**
      * Gets the issuer
+     * @return - the issuer
      */
+    @Override
     public String getIssuer() {
         return issuer;
     }
 
-    @Override
+
     /**
      * Sets the issuer
+     * @param issuer - the issuer
      */
-    public void setIssuer(String issuer) {
-        this.issuer = issuer;
+    @Override
+    public void setIssuer(final String issuer) {
+        this.issuer = issuer == null ? "" : issuer;
     }
 
-    @Override
+
     /**
-     * Gets the cc type
+     * Gets the credit card type
+     * @return - the type
      */
+    @Override
     public String getType() {
         return type;
     }
 
-    @Override
+
     /**
-     * Sets the cc type
+     * Sets the credit card type
+     * @param type - the type
      */
-    public void setType(String type) {
-        this.type = type;
+    @Override
+    public void setType(final String type) {
+        this.type = type == null ? "" : type;
     }
 
-    @Override
+
     /**
-     * Gets the card holder name
+     * Gets the name of the credit card holder
+     * @return - the holder's name
      */
+    @Override
     public String getHolder() {
         return holder;
     }
 
-    @Override
+
     /**
-     * Sets the card holder name
+     * Sets the credit card holder
+     * @param name - the name of the holder
      */
-    public void setHolder(String name) {
-        this.holder = name;
+    @Override
+    public void setHolder(final String name) {
+        this.holder = name == null ? "" : name;
     }
 
-    @Override
+
     /**
      * Gets the account number
+     * @return - the credit card number
      */
+    @Override
     public String getAccountNumber() {
         return accountNumber;
     }
 
-    @Override
+
     /**
      * Sets the account number
+     * @param accountNumber - the number
      */
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
+    @Override
+    public void setAccountNumber(final String accountNumber) {
+        this.accountNumber = accountNumber == null ? "" : accountNumber;
     }
 
-    @Override
+
     /**
      * Gets the expiration date
+     * @return - the expiration date
      */
+    @Override
     public String getExpirationDate() {
         return expirationDate;
     }
 
-    @Override
+
     /**
-     * Sets the exp date
+     * Sets the expiration date
+     * @param expDate - the expiration date
      */
-    public void setExpirationDate(String expDate) {
-        this.expirationDate = expDate;
+    @Override
+    public void setExpirationDate(final String expDate) {
+        this.expirationDate = expDate == null ? "" : expDate;
     }
 }

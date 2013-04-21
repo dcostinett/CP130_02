@@ -13,13 +13,28 @@ import java.util.prefs.Preferences;
  */
 public class AccountImpl implements Account {
 
+    /** Name of account holder */
     private String name;
+
+    /** Account balance */
     private int balance;
+
+    /** Full name of account holder */
     private String fullName;
+
+    /** Address of account holder */
     private Address address;
+
+    /** Phone number for account holder */
     private String phone;
+
+    /** Email address for account holder */
     private String email;
+
+    /** Credit card number of account holder */
     private CreditCard creditCard;
+
+    /** Hash of account holder's password */
     private byte[] passwordHash;
 
 
@@ -30,19 +45,22 @@ public class AccountImpl implements Account {
     }
 
 
-    @Override
     /**
-     * Gets the name
+     * Gets the account name
+     * @return - the name of the account
      */
+    @Override
     public String getName() {
         return name;
     }
 
 
-    @Override
     /**
-     * Sets the name
+     * Sets the name. This operation is not generally used but is provided for JavaBean conformance.
+     * @param name - the value to be set for the account name
+     * @throws AccountException - if the account name is unacceptable
      */
+    @Override
     public void setName(String name) throws AccountException {
         Preferences prefs = Preferences.userNodeForPackage(Account.class);
         if (name.length() < prefs.getInt("minAccountLength", 8)) {
@@ -52,37 +70,41 @@ public class AccountImpl implements Account {
     }
 
 
-    @Override
     /**
-     * Gets the password hash
+     * Gets the hashed password.
+     * @return - the hashed password
      */
+    @Override
     public byte[] getPasswordHash() {
         return passwordHash;
     }
 
 
-    @Override
     /**
-     * sets the password hash
+     * Sets the hashed password
+     * @param passwordHash - the value to be stored for the password hash
      */
+    @Override
     public void setPasswordHash(byte[] passwordHash) {
         this.passwordHash = passwordHash;
     }
 
 
-    @Override
     /**
-     * Gets the balance
+     * Gets the account balance
+     * @return - the current balance of the account
      */
+    @Override
     public int getBalance() {
         return balance;
     }
 
 
-    @Override
     /**
-     * Sets the balance
+     * Sets the account balance.
+     * @param balance - the account balance.
      */
+    @Override
     public void setBalance(int balance) {
         Preferences prefs = Preferences.userNodeForPackage(Account.class);
         if (balance < prefs.getInt("minAccountBalance", 0)) {
@@ -92,112 +114,125 @@ public class AccountImpl implements Account {
     }
 
 
-    @Override
     /**
-     * Gets the full name
+     * Gets the full name of the account holder
+     * @return - the account holder's full name
      */
+    @Override
     public String getFullName() {
         return fullName;
     }
 
 
-    @Override
     /**
-     * Sets the full name
+     * Sets the full name of the account holder
+     * @param fullName - the full name of the account holder
      */
+    @Override
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
 
 
-    @Override
     /**
-     * Gets the address
+     * Gets the account address
+     * @return - the address for the account holder
      */
+    @Override
     public Address getAddress() {
         return address;
     }
 
 
-    @Override
     /**
-     * Sets the address
+     * Sets the address of the account holder
+     * @param address - the address value to use
      */
+    @Override
     public void setAddress(Address address) {
         this.address = address;
     }
 
 
-    @Override
     /**
-     * Gets the phone
+     * Gets the phone number
+     * @return - the phone number of the account holder
      */
+    @Override
     public String getPhone() {
         return phone;
     }
 
 
-    @Override
     /**
-     * Sets the phone
+     * Sets the phone number of the account holder
+     * @param phone - the value to use for the account holder
      */
+    @Override
     public void setPhone(String phone) {
         this.phone = phone;
     }
 
 
-    @Override
     /**
-     * Gets the email
+     * Gets the email address
+     * @return - the email address of the account holder
      */
+    @Override
     public String getEmail() {
         return email;
     }
 
 
-    @Override
     /**
-     * Sets the email
+     * Sets the email address
+     * @param email - the value to use for the account holder's email
      */
+    @Override
     public void setEmail(String email) {
         this.email = email;
     }
 
 
-    @Override
     /**
-     * Gets the creadit card
+     * Gets the account holder's credit card number
+     * @return - the credit card number
      */
+    @Override
     public CreditCard getCreditCard() {
         return creditCard;
     }
 
 
-    @Override
     /**
-     * Sets the creadit card
+     * Sets the credit card number
+     * @param card - the value to use for the credit card
      */
+    @Override
     public void setCreditCard(CreditCard card) {
         this.creditCard = card;
     }
 
 
-    @Override
     /**
      * Sets the account manager responsible for persisting/managing this account.
      * This may be invoked exactly once on any given account, any subsequent
      * invocations should be ignored. The account manager member should not be
      * serialized with implementing class object.
+     * @param m - the account manager to set
      */
+    @Override
     public void registerAccountManager(AccountManager m) {
         //no op
     }
 
 
-    @Override
     /**
      * Incorporates the effect of an order in the balance.
+     * @param order - the order to be reflected in the account
+     * @param executionPrice - the price at which to execute the order
      */
+    @Override
     public void reflectOrder(Order order, int executionPrice) {
         if (order.isBuyOrder()) {
             balance -= order.valueOfOrder(executionPrice);
