@@ -84,12 +84,17 @@ public class AccountManagerImpl implements AccountManager {
     @Override
     public Account createAccount(final String accountName, final String password, int balance) throws AccountException {
         Account account = null;
+        account = dao.getAccount(accountName);
+        if (account != null) {
+            throw new AccountException(String.format("Account %s already exists", accountName));
+        }
         try {
             MessageDigest md = MessageDigest.getInstance("SHA1");
             md.update(password.getBytes());
 
             AccountFactory accountFactory = new AccountFactoryImpl();
             account = accountFactory.newAccount(accountName, md.digest(), balance);
+            dao.setAccount(account);
         } catch (NoSuchAlgorithmException e) {
             LOGGER.log(Level.SEVERE, "Unable to create SHA1 hash for password", e);
         }
@@ -112,7 +117,9 @@ public class AccountManagerImpl implements AccountManager {
             md.update(password.getBytes());
 
             Account account = dao.getAccount(accountName);
-            isPasswordMatch = Arrays.equals(account.getPasswordHash(), (md.digest()));
+            if (account != null) {
+                isPasswordMatch = Arrays.equals(account.getPasswordHash(), (md.digest()));
+            }
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }

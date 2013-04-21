@@ -17,10 +17,15 @@ import java.util.prefs.Preferences;
 public class AccountFactoryImpl implements AccountFactory {
     private static final Logger LOGGER = Logger.getLogger(AccountFactoryImpl.class.getName());
 
-    @Override
+
     /**
-     * instantiates a new account instance
+     * Creates a new account
+     * @param accountName
+     * @param hashedPassword
+     * @param initialBalance
+     * @return
      */
+    @Override
     public Account newAccount(String accountName, byte[] hashedPassword, int initialBalance) {
         Preferences prefs = Preferences.userNodeForPackage(edu.uw.ext.framework.account.Account.class);
         AccountImpl account = null;

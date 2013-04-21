@@ -3,6 +3,8 @@ package edu.uw.danco;
 import edu.uw.ext.framework.account.*;
 import edu.uw.ext.framework.order.Order;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
 /**
@@ -12,6 +14,8 @@ import java.util.prefs.Preferences;
  * Time: 6:13 PM
  */
 public class AccountImpl implements Account {
+    /** The logger */
+    private static final Logger LOGGER = Logger.getLogger(AccountImpl.class.getName());
 
     /** Name of account holder */
     private String name;
@@ -37,6 +41,8 @@ public class AccountImpl implements Account {
     /** Hash of account holder's password */
     private byte[] passwordHash;
 
+    /** The account manager */
+    private AccountManager accountManager = null;
 
     /**
      * Default constructor for bean support
@@ -243,7 +249,11 @@ public class AccountImpl implements Account {
      */
     @Override
     public void registerAccountManager(AccountManager m) {
-        //no op
+        if (accountManager == null) {
+            accountManager = m;
+        } else {
+            LOGGER.log(Level.SEVERE, "Account manager already set");
+        }
     }
 
 
