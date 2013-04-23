@@ -62,6 +62,8 @@ public class AccountDaoImpl implements AccountDao {
             + "   holder=VALUES(holder), "
             + "   expires=VALUES(expires) ";
 
+    //create references to the SQL PreparedStatement parameters
+
     /** The SQL used to delete an account from the mysql DB */
     private static final String ACCOUNT_DELETE_SQL =
             "DELETE from account "
@@ -96,11 +98,14 @@ public class AccountDaoImpl implements AccountDao {
      */
     public AccountDaoImpl() {
         try {
-            Hashtable<String, String> ht = new Hashtable<String, String>();
-            ht.put( Context.INITIAL_CONTEXT_FACTORY,
-                          "edu.uw.ext.naming.LocalInMemoryContextFactory" );
-            ht.put( Context.PROVIDER_URL, "namespace.xml" );
-            Context ctx = new InitialContext(ht);
+            //remove the hashmap after adding the location of the jndi.properties file to the class path.
+//            Hashtable<String, String> ht = new Hashtable<String, String>();
+//            ht.put( Context.INITIAL_CONTEXT_FACTORY,
+//                          "edu.uw.ext.naming.LocalInMemoryContextFactory" );
+//            ht.put( Context.PROVIDER_URL, "namespace.xml" );
+
+
+            Context ctx = new InitialContext();
             DataSource ds = (DataSource)ctx.lookup("jdbc/AccountDb");
             ctx.close();
 
@@ -142,7 +147,8 @@ public class AccountDaoImpl implements AccountDao {
                 account.setPhone(rs.getString(4));
                 account.setEmail(rs.getString(5));
 
-                Address address = new AddressImpl();
+                Address address = new AddressImpl();            //should be able to use beanfactory to create the
+                                                                // Address
                 address.setStreetAddress(rs.getString(6));
                 address.setCity(rs.getString(7));
                 address.setState(rs.getString(8));
@@ -199,7 +205,7 @@ public class AccountDaoImpl implements AccountDao {
                 updateAccountPs.setString(9, addr.getState());
                 updateAccountPs.setString(10, addr.getZipCode());
             } else {
-                updateAccountPs.setString(7, EMPTY_STRING);
+                updateAccountPs.setString(7, EMPTY_STRING); // prefer to use setNull for these; also create references to the column indexes rather than magic numbers
                 updateAccountPs.setString(8, EMPTY_STRING);
                 updateAccountPs.setString(9, EMPTY_STRING);
                 updateAccountPs.setString(10, EMPTY_STRING);
@@ -267,9 +273,13 @@ public class AccountDaoImpl implements AccountDao {
     public void close() throws AccountException {
         try {
             // prepared statements should automatically get closed by closing the connection.
-            conn.close();
+            if (conn != null) {
+                conn.close();
+            }
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Unable to close connection to DB", e);
+        } finally {
+            conn = null;
         }
     }
 }
