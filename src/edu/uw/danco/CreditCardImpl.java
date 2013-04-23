@@ -10,11 +10,31 @@ import edu.uw.ext.framework.account.CreditCard;
  */
 public class CreditCardImpl implements CreditCard {
 
+    /**
+     * The issuer
+     */
     private String issuer;
+
+    /**
+     * The type of credit card
+     */
     private String type;
+
+    /**
+     * The credit card holder
+     */
     private String holder;
+
+    /**
+     * The account number
+     */
     private String accountNumber;
+
+    /**
+     * The expiration date
+     */
     private String expirationDate;
+
 
     /**
      * Gets the issuer
