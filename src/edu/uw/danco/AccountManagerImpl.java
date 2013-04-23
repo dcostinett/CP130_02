@@ -66,8 +66,10 @@ public class AccountManagerImpl implements AccountManager {
     @Override
     public Account getAccount(final String accountName) throws AccountException {
         Account account = dao.getAccount(accountName);
-        account.registerAccountManager(this);
-        // need to register account manager with the account (pass the "this" ref)
+
+        if (account != null) {
+            account.registerAccountManager(this);
+        }
 
         return account;
     }

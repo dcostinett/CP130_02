@@ -77,6 +77,9 @@ public class AccountDaoImpl implements AccountDao {
     /** The logger */
     private static final Logger LOGGER = Logger.getLogger(AccountDaoImpl.class.getName());
 
+    /** THe name of the db to connect to */
+    private static final String JDBC_ACCOUNT_DB = "jdbc/AccountDb";
+
     /** THe connection to the data store */
     private Connection conn = null;
 
@@ -98,15 +101,8 @@ public class AccountDaoImpl implements AccountDao {
      */
     public AccountDaoImpl() {
         try {
-            //remove the hashmap after adding the location of the jndi.properties file to the class path.
-//            Hashtable<String, String> ht = new Hashtable<String, String>();
-//            ht.put( Context.INITIAL_CONTEXT_FACTORY,
-//                          "edu.uw.ext.naming.LocalInMemoryContextFactory" );
-//            ht.put( Context.PROVIDER_URL, "namespace.xml" );
-
-
             Context ctx = new InitialContext();
-            DataSource ds = (DataSource)ctx.lookup("jdbc/AccountDb");
+            DataSource ds = (DataSource)ctx.lookup(JDBC_ACCOUNT_DB);
             ctx.close();
 
             try {
@@ -169,7 +165,9 @@ public class AccountDaoImpl implements AccountDao {
             LOGGER.log(Level.SEVERE, "Unable to set accountname to: " + accountName, e);
         } finally {
             try {
-                rs.close();
+                if (rs != null) {
+                    rs.close();
+                }
             } catch (SQLException e) {
                 LOGGER.log(Level.SEVERE, "Unable to close ResultSet", e);
             }
